@@ -10,8 +10,6 @@
      "name": "stdout",
      "output_type": "stream",
      "text": [
-      "Attempting to load CSV file...\n",
-      "CSV file loaded successfully!\n",
       " * Serving Flask app '__main__'\n",
       " * Debug mode: on\n"
      ]
@@ -21,7 +19,9 @@
      "output_type": "stream",
      "text": [
       "WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.\n",
-      " * Running on http://127.0.0.1:5001\n",
+      " * Running on all addresses (0.0.0.0)\n",
+      " * Running on http://127.0.0.1:5000\n",
+      " * Running on http://192.168.30.251:5000\n",
       "Press CTRL+C to quit\n",
       " * Restarting with stat\n"
      ]
@@ -45,29 +45,18 @@
     }
    ],
    "source": [
-    "import os\n",
-    "import pandas as pd\n",
-    "import traceback\n",
     "from flask import Flask, render_template, request\n",
+    "import pandas as pd\n",
+    "import os\n",
     "\n",
     "app = Flask(__name__)\n",
     "\n",
-    "csv_path = r\"D:\\Project food Genie\\MERGED_FOOD_DATA_WITH_GRAMS.csv\"\n",
-    "\n",
-    "# Debug: Check if the file exists\n",
+    "# Load CSV file (Ensure the correct path)\n",
+    "csv_path = \"MERGED_FOOD_DATA_WITH_GRAMS.csv\"\n",
     "if not os.path.exists(csv_path):\n",
-    "    print(\"ERROR: CSV file not found!\")\n",
-    "    exit(1)\n",
+    "    raise FileNotFoundError(f\"ERROR: CSV file '{csv_path}' not found. Ensure the file exists in the project directory.\")\n",
     "\n",
-    "# Debug: Try loading CSV with error handling\n",
-    "try:\n",
-    "    print(\"Attempting to load CSV file...\")\n",
-    "    df = pd.read_csv(csv_path, encoding=\"utf-8\")\n",
-    "    print(\"CSV file loaded successfully!\")\n",
-    "except Exception as e:\n",
-    "    print(\"ERROR: Could not load CSV file.\")\n",
-    "    traceback.print_exc()\n",
-    "    exit(1)\n",
+    "df = pd.read_csv(csv_path, encoding=\"utf-8\")\n",
     "\n",
     "@app.route(\"/\", methods=[\"GET\", \"POST\"])\n",
     "def index():\n",
@@ -79,7 +68,7 @@
     "    return render_template(\"index.html\", results=results)\n",
     "\n",
     "if __name__ == \"__main__\":\n",
-    "    app.run(debug=True, port=5001)\n"
+    "    app.run(debug=True, host=\"0.0.0.0\", port=5000)\n"
    ]
   },
   {
