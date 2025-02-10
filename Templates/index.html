@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Genie</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://i.postimg.cc/4dxxsHp1/DALL-E-2024-12-03-13-02-33-A-high-resolution-visually-appealing-background-image-featuring-a-vari.webp');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 90%;
+            overflow: hidden;
+        }
+        .title {
+            font-size: 4em;
+            color: #ff6f00;
+            margin-bottom: 0.2em;
+            font-family: 'Pacifico', cursive;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3);
+        }
+        .quote {
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .search-bar {
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            width: 70%;
+            padding: 15px;
+            font-size: 1.2em;
+            border: 2px solid #ff6f00;
+            border-radius: 25px;
+            text-align: center;
+        }
+        button {
+            padding: 15px 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #ff6f00, #ff9000);
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #ff9000, #ff6f00);
+            transform: scale(1.05);
+        }
+        .results {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 2px solid #ff6f00;
+            padding: 15px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            text-align: left;
+            font-weight: bold;
+        }
+        .results ul {
+            list-style: none;
+            padding: 0;
+        }
+        .results li {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .food-name {
+            font-weight: bold;
+            color: #ff6f00;
+        }
+        .calories {
+            color: #333;
+            font-style: italic;
+        }
+        .nutrition {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Food Genie</div>
+        <div class="quote">"Genie says: The lightest choices first! ✨🔽"</div>
+        <form method="POST">
+            <div class="search-bar">
+                <input type="text" name="query" placeholder="What are you craving today?" required>
+                <button type="submit">Search</button>
+            </div>
+        </form>
+
+        {% if message %}
+            <p class="results"><strong>{{ message }}</strong></p>
+        {% endif %}
+
+        {% if results is not none and not results.empty %}
+            <div class="results">
+                <h3>🔍 Search Results:</h3>
+                <ul>
+                    {% for _, row in results.iterrows() %}
+                        <li>
+                            <span class="food-name">{{ row.food }}</span>
+                            <span class="calories">{{ row["Caloric Value"] }} kcal</span>
+                            <div class="nutrition">
+                                🥩 Protein: {{ row.Protein }}g | 🍞 Carbs: {{ row.Carbohydrates }}g | 🥑 Fat: {{ row.Fat }}g
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
