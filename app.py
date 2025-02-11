@@ -1,23 +1,26 @@
-import os
 from flask import Flask, render_template, request
 import pandas as pd
+import os
 
 app = Flask(__name__)
 
-# Use the correct path for the CSV file
+# Define CSV path
 csv_path = r"D:\Project food Genie\MERGED_FOOD_DATA_WITH_GRAMS.csv"
 
-# Verify if the file exists
-if not os.path.exists(csv_path):
-    raise FileNotFoundError(f"ERROR: CSV file '{csv_path}' not found. Ensure it is in the project directory.")
-
-# Load CSV
+# Load CSV data
 df = pd.read_csv(csv_path, encoding="utf-8")
 
-# Ensure correct column name
-food_column = "food"
-if food_column not in df.columns:
-    raise KeyError(f"ERROR: '{food_column}' column not found in CSV. Available columns: {df.columns}")
+# Get actual column names
+actual_columns = df.columns.tolist()
+print("📊 Actual Column Names in CSV:", actual_columns)
+
+# Use the correct column name
+if "food_name" in df.columns:
+    food_column = "food_name"
+elif "food" in df.columns:
+    food_column = "food"
+else:
+    raise KeyError(f"❌ ERROR: No valid 'food' column found in CSV. Available columns: {df.columns}")
 
 @app.route("/", methods=["GET", "POST"])
 def index():
